@@ -1,0 +1,19 @@
+<Project>
+  <PropertyGroup>
+    <AWSCDKVersion>2.138.0</AWSCDKVersion>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
+    <RuntimeVersion>8.0.0</RuntimeVersion>
+    <AspireVersion>8.0.0-preview.5.24201.12</AspireVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- Version together with AWS CDK -->
+    <PackageVersion Include="Constructs" Version="10.3.0" />
+    <PackageVersion Include="Amazon.CDK.Lib" Version="$(AWSCDKVersion)" />
+    <!-- Version together with AWS SDK.NET -->
+    <PackageVersion Include="AWSSDK.Core" Version="3.7.302.14" />
+    <PackageVersion Include="AWSSDK.CloudFormation" Version="3.7.303.9" />
+    <!-- Version together with Aspire -->
+    <PackageVersion Include="Aspire.Hosting" Version="$(AspireVersion)" />
+  </ItemGroup>
+</Project>
