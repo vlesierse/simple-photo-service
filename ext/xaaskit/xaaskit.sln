@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XaasKit.Domain", "src\XaasKit.Domain\XaasKit.Domain.csproj", "{5075ABF0-3011-49C6-918D-471F6213F6BD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XaasKit.Core", "src\XaasKit.Core\XaasKit.Core.csproj", "{27C8E9BE-D104-4925-95AD-96D16B4ADBC4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XaasKit.Amazon", "src\XaasKit.Amazon\XaasKit.Amazon.csproj", "{229D0805-C857-4BF1-96ED-3A80AC7903C2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XaasKit.Amazon.DynamoDB", "src\XaasKit.Amazon.DynamoDB\XaasKit.Amazon.DynamoDB.csproj", "{3CD64A9C-27AE-4F92-AE5E-34FC366D8209}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5075ABF0-3011-49C6-918D-471F6213F6BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5075ABF0-3011-49C6-918D-471F6213F6BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5075ABF0-3011-49C6-918D-471F6213F6BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5075ABF0-3011-49C6-918D-471F6213F6BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{27C8E9BE-D104-4925-95AD-96D16B4ADBC4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27C8E9BE-D104-4925-95AD-96D16B4ADBC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27C8E9BE-D104-4925-95AD-96D16B4ADBC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27C8E9BE-D104-4925-95AD-96D16B4ADBC4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{229D0805-C857-4BF1-96ED-3A80AC7903C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{229D0805-C857-4BF1-96ED-3A80AC7903C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{229D0805-C857-4BF1-96ED-3A80AC7903C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{229D0805-C857-4BF1-96ED-3A80AC7903C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3CD64A9C-27AE-4F92-AE5E-34FC366D8209}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3CD64A9C-27AE-4F92-AE5E-34FC366D8209}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3CD64A9C-27AE-4F92-AE5E-34FC366D8209}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3CD64A9C-27AE-4F92-AE5E-34FC366D8209}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

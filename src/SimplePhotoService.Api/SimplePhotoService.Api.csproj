@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <TargetFramework>net8.0</TargetFramework>
+    <ContainerImage>simplephotoservice-api</ContainerImage>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Amazon.Lambda.AspNetCoreServer.Hosting" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SimplePhotoService.Application\SimplePhotoService.Application.csproj" />
+    <ProjectReference Include="..\SimplePhotoService.Infrastructure\SimplePhotoService.Infrastructure.csproj" />
+    <ProjectReference Include="..\SimplePhotoService.ServiceDefaults\SimplePhotoService.ServiceDefaults.csproj" />
+  </ItemGroup>
+
+</Project>

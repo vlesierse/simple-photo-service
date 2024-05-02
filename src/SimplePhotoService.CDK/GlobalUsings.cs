@@ -1,0 +1,10 @@
+global using Amazon.CDK;
+global using Amazon.CDK.AWS.Logs;
+global using Amazon.CDK.AWS.Cognito;
+global using Amazon.CDK.AWS.DynamoDB;
+global using Amazon.CDK.AWS.Apigatewayv2;
+global using Amazon.CDK.AwsApigatewayv2Authorizers;
+global using Amazon.CDK.AwsApigatewayv2Integrations;
+global using Amazon.CDK.AWS.Lambda;
+global using Amazon.CDK.AWS.Lambda.DotNet;
+global using Attribute = Amazon.CDK.AWS.DynamoDB.Attribute;
