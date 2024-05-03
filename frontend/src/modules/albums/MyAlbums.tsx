@@ -4,18 +4,23 @@ import {
   Cards,
   CardsProps,
   Header,
-  Link,
   SpaceBetween,
 } from "@cloudscape-design/components";
 import { useNavigate } from "react-router-dom";
 import { get } from "aws-amplify/api";
 
 import { Album } from "./_types";
+import { AppRoutes, asLink, buildPathParams } from "../../common/paths";
+
+import { Link } from "../../components/navigation";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const cardDefinition: CardsProps.CardDefinition<Album> = {
   header: (item) => (
-    <Link href="#" fontSize="heading-m">
+    <Link
+      href={asLink(buildPathParams(AppRoutes.Albums.View, { id: item.id }))}
+      fontSize="heading-m"
+    >
       {item.title}
     </Link>
   ),

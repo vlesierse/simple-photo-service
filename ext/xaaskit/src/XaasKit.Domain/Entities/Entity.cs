@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace XaasKit.Domain.Entities;
 
 /// <inheritdoc/>
@@ -26,7 +28,7 @@ public abstract class Entity<TKey> : Entity, IEntity<TKey>
     public virtual TKey Id { get; protected init; } = default!;
 
     protected Entity() { }
-
+    
     protected Entity(TKey id)
     {
         // ReSharper disable once VirtualMemberCallInConstructor
