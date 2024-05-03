@@ -34,8 +34,8 @@ export const MyAlbums = () => {
           path: "/albums",
         });
         const response = await restOperation.response;
-        console.log("GET call succeeded: ", response);
-        setAlbums([]);
+        const json = await response.body.json();
+        setAlbums(json as Album[]);
       })();
     }
     isMounted.current = true;

@@ -16,8 +16,4 @@ public class XaasKitException : Exception
     public XaasKitException(string? message, Exception? innerException)
         : base(message, innerException)
     { }
-
-    public XaasKitException(SerializationInfo serializationInfo, StreamingContext context)
-        : base(serializationInfo, context)
-    { }
 }

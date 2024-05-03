@@ -42,6 +42,6 @@ builder.AddNpmApp("frontend", "../../frontend", "dev")
     .WithEnvironment("VITE_API_HTTP", api.GetEndpoint("http"))
     .WithEnvironment("VITE_AWS_USER_POOL_ID", userPool, c => c.UserPoolId)
     .WithEnvironment("VITE_AWS_USER_POOL_CLIENT_ID", userPoolClient, c => c.UserPoolClientId)
-    .WithHttpEndpoint(env: "PORT");
+    .WithHttpEndpoint(env: "PORT", port: 5173);
 
 builder.Build().Run();

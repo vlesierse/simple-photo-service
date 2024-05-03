@@ -24,8 +24,11 @@ const FormValidation = Yup.object().shape({
 export const CreateAlbum = () => {
   const navigate = useNavigate();
   const handleSubmit = async ({ title }: FormType) => {
-    //console.log(values);
-    post({ apiName: "AppApi", path: "/albums", options: { body: { title } } });
+    const result = await post({
+      apiName: "AppApi",
+      path: "/albums",
+      options: { body: { title } },
+    });
     navigate(-1);
   };
 

@@ -2,7 +2,6 @@ using Amazon.DynamoDBv2;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using XaasKit.Amazon.DynamoDB.Client;
 using XaasKit.Amazon.DynamoDB.Repositories;
 using XaasKit.Domain.Repositories;
 
@@ -15,10 +14,11 @@ public static class DynamoDBServiceCollectionExtensions
         _ = services.AddAWSService<IAmazonDynamoDB>();
         // DynamoDB Client
         _ = services.AddOptions().Configure<DynamoDBOptions>(configuration);
-        services.TryAddTransient<IDynamoDBClient, DynamoDBClient>();
         // Repositories
         services.TryAddTransient(typeof(IRepository<>), typeof(DynamoDbRepository<>));
+        services.TryAddTransient(typeof(IRepository<,>), typeof(DynamoDbRepository<,>));
         services.TryAddTransient(typeof(IReadOnlyRepository<>), typeof(DynamoDbRepository<>));
+        services.TryAddTransient(typeof(IReadOnlyRepository<,>), typeof(DynamoDbRepository<,>));
         return services;
     }
 }

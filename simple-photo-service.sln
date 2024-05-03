@@ -23,11 +23,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Api", "Api", "{A906D3AE-3EB
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "XaasKit", "XaasKit", "{14A94A23-C79C-4B51-987C-7A8D3DC534C6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XaasKit.Core", "..\..\xaaskit\xaaskit\src\XaasKit.Core\XaasKit.Core.csproj", "{BBCE5F1B-845F-40F2-B64B-6BF3BC4F66FD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XaasKit.Core", "ext\xaaskit\src\XaasKit.Core\XaasKit.Core.csproj", "{BBCE5F1B-845F-40F2-B64B-6BF3BC4F66FD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XaasKit.Domain", "..\..\xaaskit\xaaskit\src\XaasKit.Domain\XaasKit.Domain.csproj", "{2F966A76-7382-4795-A57E-661A895F4474}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XaasKit.Domain", "ext\xaaskit\src\XaasKit.Domain\XaasKit.Domain.csproj", "{2F966A76-7382-4795-A57E-661A895F4474}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XaasKit.Amazon.DynamoDB", "..\..\xaaskit\xaaskit\src\XaasKit.Amazon.DynamoDB\XaasKit.Amazon.DynamoDB.csproj", "{A6B8047C-620E-4872-80AF-61758ABE8FD0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XaasKit.Amazon.DynamoDB", "ext\xaaskit\src\XaasKit.Amazon.DynamoDB\XaasKit.Amazon.DynamoDB.csproj", "{A6B8047C-620E-4872-80AF-61758ABE8FD0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimplePhotoService.ServiceDefaults", "src\SimplePhotoService.ServiceDefaults\SimplePhotoService.ServiceDefaults.csproj", "{98716A45-53A0-444E-92AA-D87D80792736}"
 EndProject
@@ -37,7 +37,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Externals", "Externals", "{
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Aspire", "Aspire", "{E1464B7D-1B4E-40E2-A312-ABABEAE845ED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aspire.Hosting.AWS", "..\..\dotnet\aspire-aws\src\Aspire.Hosting.AWS\Aspire.Hosting.AWS.csproj", "{CBC72898-868B-4804-9233-F7858A644388}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aspire.Hosting.AWS", "exact\aspire\src\Aspire.Hosting.AWS\Aspire.Hosting.AWS.csproj", "{CBC72898-868B-4804-9233-F7858A644388}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

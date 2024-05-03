@@ -19,15 +19,16 @@ public static class AlbumEndpoints
         return app;
     }
     
-    public static IResult ListAlbums(IMediator mediator)
+    public static async Task<IResult> ListAlbums(IMediator mediator)
     {
-        var albums = mediator.Send(new ListAlbumsQuery());
+        var albums = await mediator.Send(new ListAlbumsQuery());
         return Results.Ok(albums);
     }
     
-    public static IResult GetAlbumById(Guid id)
+    public static async Task<IResult> GetAlbumById(Guid id, IMediator mediator)
     {
-        return Results.Ok(new Album(id, ""));
+        var result = await mediator.Send(new GetAlbumByIdQuery(id));
+        return result == null ? Results.NotFound() : Results.Ok(result);
     }
     
     public static async Task<IResult> CreateAlbum([FromBody] CreateAlbumInput input, IMediator mediator)

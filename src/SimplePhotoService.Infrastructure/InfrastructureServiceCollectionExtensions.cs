@@ -9,7 +9,7 @@ public static class InfrastructureServiceCollectionExtensions
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
     {
         // Add DynamoDB Storage support.
-        _ = services.AddDynamoDB(configuration.GetSection("DynamoDB"));
+        _ = services.AddDynamoDB(configuration.GetSection("AWS:Resources:Table"));
         return services;
     }
 }

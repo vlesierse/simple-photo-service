@@ -25,10 +25,7 @@ public abstract class Entity<TKey> : Entity, IEntity<TKey>
     /// <inheritdoc/>
     public virtual TKey Id { get; protected init; } = default!;
 
-    protected Entity()
-    {
-
-    }
+    protected Entity() { }
 
     protected Entity(TKey id)
     {
@@ -38,7 +35,7 @@ public abstract class Entity<TKey> : Entity, IEntity<TKey>
 
     public override object?[] GetKeys()
     {
-        return new object?[] { Id };
+        return [Id];
     }
 
     /// <inheritdoc/>
