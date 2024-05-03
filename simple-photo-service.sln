@@ -37,7 +37,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Externals", "Externals", "{
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Aspire", "Aspire", "{E1464B7D-1B4E-40E2-A312-ABABEAE845ED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aspire.Hosting.AWS", "exact\aspire\src\Aspire.Hosting.AWS\Aspire.Hosting.AWS.csproj", "{CBC72898-868B-4804-9233-F7858A644388}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aspire.Hosting.AWS", "ext\aspire\src\Aspire.Hosting.AWS\Aspire.Hosting.AWS.csproj", "{CBC72898-868B-4804-9233-F7858A644388}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
