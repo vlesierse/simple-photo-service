@@ -6,7 +6,7 @@ using Amazon.CDK.AWS.S3;
 using Attribute = Amazon.CDK.AWS.DynamoDB.Attribute;
 
 var builder = DistributedApplication.CreateBuilder(args).WithAWSCDK();
-var config = builder.AddAWSSDKConfig().WithProfile("default");
+var config = builder.AddAWSSDKConfig().WithProfile("vinles+labs-Admin");
 
 var stack = builder.AddStack("stack", stackName: "SimplePhotoService").WithReference(config);
 var table = stack

@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Mediator;
 using Microsoft.AspNetCore.Mvc;
 using SimplePhotoService.Api.Contracts;
@@ -22,9 +23,14 @@ public static class AlbumEndpoints
         return app;
     }
     
-    public static async Task<IResult> ListAlbums(IMediator mediator)
+    public static async Task<IResult> ListAlbums(IMediator mediator, ClaimsPrincipal user)
     {
-        var albums = await mediator.Send(new ListAlbumsQuery());
+        var userId = user.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (userId == null)
+        {
+            return Results.BadRequest("Invalid token");
+        }
+        var albums = await mediator.Send(new ListAlbumsQuery(userId));
         return Results.Ok(albums);
     }
     
@@ -40,9 +46,14 @@ public static class AlbumEndpoints
         return result == null ? Results.NotFound() : Results.Ok(result);
     }
     
-    public static async Task<IResult> CreateAlbum([FromBody] CreateAlbumInput input, IMediator mediator)
+    public static async Task<IResult> CreateAlbum([FromBody] CreateAlbumInput input, IMediator mediator, ClaimsPrincipal user)
     {
-        var result = await mediator.Send(new CreateAlbumCommand(input.Title!));
+        var userId = user.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (userId == null)
+        {
+            return Results.BadRequest("Invalid token");
+        }
+        var result = await mediator.Send(new CreateAlbumCommand(input.Title!, userId));
         return Results.Ok(result.FromResult());
     }
 }

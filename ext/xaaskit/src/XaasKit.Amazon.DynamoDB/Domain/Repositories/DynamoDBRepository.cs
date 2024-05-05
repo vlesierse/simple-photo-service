@@ -19,8 +19,8 @@ public class DynamoDbRepository<TEntity>(IAmazonDynamoDB _client, IOptions<Dynam
     public override async Task<TEntity> InsertAsync(TEntity entity, CancellationToken cancellationToken = default)
     {
         var document = ToDocument(entity);
-        var result = await Table.PutItemAsync(document, cancellationToken);
-        return FromDocument(result);
+        _ = await Table.PutItemAsync(document, cancellationToken);
+        return entity;
     }
 
     public override Task<TEntity> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
