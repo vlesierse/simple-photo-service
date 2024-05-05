@@ -7,7 +7,6 @@ public static class WebApplicationExtensions
 {
     public static WebApplication ConfigureApplication(this WebApplication app, IWebHostEnvironment environment)
     {
-        
         #region Security
         
         if (environment.IsDevelopment())
@@ -29,10 +28,18 @@ public static class WebApplicationExtensions
         */
         
         #endregion Swagger
+        
+        #region Authentication
+        
+        _ = app.UseAuthentication();
+        _ = app.UseAuthorization();
+        
+        #endregion
 
         #region Endpoints
 
         _ = app.MapAlbumEndpoints();
+        _ = app.MapPhotoEndpoints();
         
         #endregion Endpoints
         

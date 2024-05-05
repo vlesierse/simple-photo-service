@@ -1,3 +1,4 @@
+using Amazon;
 using Amazon.CDK;
 using Amazon.CDK.AWS.Cognito;
 using Amazon.CDK.AWS.DynamoDB;
@@ -36,7 +37,8 @@ var userPoolClient = userPool.AddClient("client", new UserPoolClientOptions());
 var api = builder.AddProject<Projects.SimplePhotoService_Api>("api")
     .WithReference(table, "AWS::Resources::Table")
     .WithReference(topic, "AWS::Resources::Topic")
-    .WithReference(bucket, "AWS::Resources::Bucket");
+    .WithReference(bucket, "AWS::Resources::Bucket")
+    .WithReference(userPool, "AWS::Resources::Cognito");
 
 builder.AddNpmApp("frontend", "../../frontend", "dev")
     .WithEnvironment("VITE_API_HTTP", api.GetEndpoint("http"))

@@ -10,7 +10,9 @@ public static class AlbumEndpoints
 {
     public static WebApplication MapAlbumEndpoints(this WebApplication app)
     {
-        var root = app.MapGroup("/albums");
+        var root = app
+            .MapGroup("/albums")
+            .RequireAuthorization();
         
         _ = root.MapGet("/", ListAlbums);
         _ = root.MapPost("/", CreateAlbum);

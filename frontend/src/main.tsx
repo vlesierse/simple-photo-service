@@ -29,8 +29,8 @@ Amplify.configure(
         headers: async () => {
           const authToken = (
             await fetchAuthSession()
-          ).tokens?.idToken?.toString();
-          return { Authorization: authToken };
+          ).tokens?.accessToken?.toString();
+          return { Authorization: "Bearer " + authToken };
         },
       },
     },
