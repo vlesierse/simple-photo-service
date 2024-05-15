@@ -1,19 +1,63 @@
-import { useEffect, useRef, useState } from "react";
+import { createRef, useEffect, useRef, useState } from "react";
 import {
   Button,
   Cards,
+  CardsProps,
   Container,
   Header,
-  SpaceBetween,
 } from "@cloudscape-design/components";
-import { useNavigate, useParams } from "react-router-dom";
-import { get } from "aws-amplify/api";
+import { useParams } from "react-router-dom";
+import { get, post } from "aws-amplify/api";
 
-import { Album } from "./_types";
+import { Album, Photo, PhotoUpload } from "./_types";
 
 export const ViewAlbum = () => {
   const { id } = useParams();
   const [album, setAlbum] = useState<Album | undefined>();
+  const [photos, setPhotos] = useState<Photo[]>([{ id: "" }]);
+  const fileInputRef = createRef<HTMLInputElement>();
+
+  const cardDefinition: CardsProps.CardDefinition<Photo> = {
+    sections: [
+      {
+        content: (photo) => (
+          <Container>
+            {photo.url ? (
+              <img src={photo.url} />
+            ) : (
+              <>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="*.jpg,*.jpeg"
+                  hidden
+                  onChange={(e) => handleFileUpload(e.target?.files)}
+                />
+                <Button
+                  iconName="add-plus"
+                  variant="icon"
+                  onClick={() => fileInputRef.current?.click()}
+                />
+              </>
+            )}
+          </Container>
+        ),
+      },
+    ],
+  };
+
+  const handleFileUpload = async (files: FileList | null) => {
+    const restOperation = post({
+      apiName: "AppApi",
+      path: `/albums/${id}/photos`,
+    });
+    const response = await restOperation.response;
+    const upload = (await response.body.json()) as PhotoUpload;
+    await fetch(upload.url, {
+      method: "PUT",
+      body: files?.[0],
+    });
+  };
 
   const isMounted = useRef<boolean>(false);
   useEffect(() => {
@@ -25,11 +69,19 @@ export const ViewAlbum = () => {
         });
         const response = await restOperation.response;
         const json = await response.body.json();
+        const album = json as Album;
         setAlbum(json as Album);
+        setPhotos([...album.photos, { id: "" }]);
       })();
     }
     isMounted.current = true;
   }, [id]);
 
-  return <Container header={<Header variant="h2">{album?.title}</Header>} />;
+  return (
+    <Cards
+      items={photos}
+      cardDefinition={cardDefinition}
+      header={<Header>{album?.title}</Header>}
+    />
+  );
 };

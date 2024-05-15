@@ -31,6 +31,7 @@ public static class CognitoResourceExtensions
     {
         return builder.AddConstruct(name, scope => builder.Resource.Construct.AddClient(name, options));
     }
+    
     /// <summary>
     /// Adds a reference of an Amazon Cognito user pool to a project. The output parameters of the user pool are added to the project IConfiguration.
     /// </summary>

@@ -1,4 +1,3 @@
-using Amazon;
 using Amazon.CDK;
 using Amazon.CDK.AWS.Cognito;
 using Amazon.CDK.AWS.DynamoDB;
@@ -6,7 +5,7 @@ using Amazon.CDK.AWS.S3;
 using Attribute = Amazon.CDK.AWS.DynamoDB.Attribute;
 
 var builder = DistributedApplication.CreateBuilder(args).WithAWSCDK();
-var config = builder.AddAWSSDKConfig().WithProfile("vinles+labs-Admin");
+var config = builder.AddAWSSDKConfig().WithProfile("default");
 
 var stack = builder.AddStack("stack", stackName: "SimplePhotoService").WithReference(config);
 var table = stack
@@ -19,12 +18,25 @@ var table = stack
     })
         .AddGlobalSecondaryIndex(new GlobalSecondaryIndexProps {
             IndexName = "OwnerIndex",
-            PartitionKey = new Attribute { Name = "owner", Type = AttributeType.STRING },
-            SortKey = new Attribute { Name = "ownerSK", Type = AttributeType.STRING },
+            PartitionKey = new Attribute { Name = "OwnerId", Type = AttributeType.STRING },
+            SortKey = new Attribute { Name = "OwnerSK", Type = AttributeType.STRING },
             ProjectionType = ProjectionType.ALL
         });
-var topic = stack.AddSNSTopic("topic");
-var bucket = stack.AddS3Bucket("bucket", new BucketProps { RemovalPolicy = RemovalPolicy.DESTROY });
+var bucketNotifications = stack.AddSQSQueue("queue");
+var bucket = stack.AddS3Bucket("bucket", new BucketProps
+    {
+        Cors = [
+            new CorsRule
+            {
+                AllowedMethods = [ HttpMethods.PUT, HttpMethods.GET ],
+                AllowedHeaders = ["*"],
+                AllowedOrigins = ["*"]
+            }
+        ],
+        RemovalPolicy = RemovalPolicy.DESTROY
+    })
+    .AddObjectCreatedNotifications(bucketNotifications, new NotificationKeyFilter { Prefix = "uploads/"});
+
 var userPool = stack.AddCognitoUserPool("userpool", new UserPoolProps
 {
     UserPoolName = $"SimplePhotoService",
@@ -36,9 +48,11 @@ var userPoolClient = userPool.AddClient("client", new UserPoolClientOptions());
 
 var api = builder.AddProject<Projects.SimplePhotoService_Api>("api")
     .WithReference(table, "AWS::Resources::Table")
-    .WithReference(topic, "AWS::Resources::Topic")
     .WithReference(bucket, "AWS::Resources::Bucket")
     .WithReference(userPool, "AWS::Resources::Cognito");
+
+builder.AddProject<Projects.SimplePhotoService_Controller>("controller")
+    .WithReference(bucketNotifications, "AWS::Resources::Queue");
 
 builder.AddNpmApp("frontend", "../../frontend", "dev")
     .WithEnvironment("VITE_API_HTTP", api.GetEndpoint("http"))

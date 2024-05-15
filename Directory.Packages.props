@@ -5,7 +5,7 @@
     <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
     <AspnetVersion>8.0.0</AspnetVersion>
     <RuntimeVersion>8.0.1</RuntimeVersion>
-    <AspireVersion>8.0.0-preview.5.24201.12</AspireVersion>
+    <AspireVersion>8.0.0-preview.7.24251.11</AspireVersion>
     <OpenTelemetryVersion>1.8.1</OpenTelemetryVersion>
   </PropertyGroup>
   <ItemGroup>
@@ -15,10 +15,15 @@
     <PackageVersion Include="Amazon.CDK.AWS.Lambda.DotNet" Version="0.0.3" />
     <!-- Version together with AWS SDK.NET -->
     <PackageVersion Include="Amazon.Lambda.AspNetCoreServer.Hosting" Version="1.7.0" />
+    <PackageVersion Include="Amazon.Lambda.S3Events" Version="3.1.0" />
+    <PackageVersion Include="AWS.Messaging" Version="0.9.1" />
+    <PackageVersion Include="AWS.Messaging.Telemetry.OpenTelemetry" Version="0.9.1" />
     <PackageVersion Include="AWSSDK.CloudFormation" Version="3.7.303.9" />
-    <PackageVersion Include="AWSSDK.Core" Version="3.7.302.14" />
-    <PackageVersion Include="AWSSDK.DynamoDBv2" Version="3.7.301.14" />
+    <PackageVersion Include="AWSSDK.Core" Version="3.7.304.1" />
+    <PackageVersion Include="AWSSDK.DynamoDBv2" Version="3.7.303.2" />
     <PackageVersion Include="AWSSDK.Extensions.NETCore.Setup" Version="3.7.300" />
+    <PackageVersion Include="AWSSDK.S3" Version="3.7.307.29" />
+    <PackageVersion Include="AWSSDK.SQS" Version="3.7.301.4" />
     <!-- Version together with Aspire -->
     <PackageVersion Include="Aspire.Hosting" Version="$(AspireVersion)" />
     <PackageVersion Include="Aspire.Hosting.AppHost" Version="$(AspireVersion)" />
@@ -30,8 +35,9 @@
     <PackageVersion Include="Microsoft.Extensions.Http.Resilience" Version="$(AspnetVersion)" />
     <!-- Version together with EF -->
     <!-- Version together with runtime -->
-    <PackageVersion Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="$(RuntimeVersion)" />
+    <PackageVersion Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
     <!-- VS Test -->
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.7.2" />
     <!-- Open Telemetry -->

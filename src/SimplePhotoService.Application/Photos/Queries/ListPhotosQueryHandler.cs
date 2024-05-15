@@ -1,16 +1,18 @@
 using Mediator;
 using SimplePhotoService.Application.Photos.Queries;
 using SimplePhotoService.Domain.Entities;
+using SimplePhotoService.Domain.Repositories;
 using XaasKit.Domain.Repositories;
 
 namespace SimplePhotoService.Application.Queries;
 
-public class ListPhotosQueryHandler(IReadOnlyRepository<Photo> repository) : IRequestHandler<ListPhotosQuery, List<Photo>>
+public class ListPhotosQueryHandler(IPhotoRepository repository) : IRequestHandler<ListPhotosQuery, IList<Photo>>
 {
     public IReadOnlyRepository<Photo> Repository { get; } = repository;
 
-    public ValueTask<List<Photo>> Handle(ListPhotosQuery request, CancellationToken cancellationToken)
+    public async ValueTask<IList<Photo>> Handle(ListPhotosQuery query, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var result = await repository.ListPhotosInAlbum(query.AlbumId, cancellationToken);
+        return result;
     }
 }

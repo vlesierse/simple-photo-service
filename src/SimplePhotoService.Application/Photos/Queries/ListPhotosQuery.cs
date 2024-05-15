@@ -3,4 +3,4 @@ using SimplePhotoService.Domain.Entities;
 
 namespace SimplePhotoService.Application.Photos.Queries;
 
-public record ListPhotosQuery(Guid AlbumId) : IRequest<List<Photo>>;
+public record ListPhotosQuery(Guid AlbumId) : IRequest<IList<Photo>>;

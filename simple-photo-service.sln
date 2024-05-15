@@ -5,12 +5,6 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimplePhotoService.Api", "src\SimplePhotoService.Api\SimplePhotoService.Api.csproj", "{F0E24A7C-3ABD-4B1C-A44B-CF6A5B0702B1}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Functions", "Functions", "{8ADBD3B3-6EDA-438D-86AA-D6A9F01E7098}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimplePhotoService.Functions.CognitoTriggers", "src\SimplePhotoService.Functions.CognitoTriggers\SimplePhotoService.Functions.CognitoTriggers.csproj", "{081F80D9-3877-4826-8757-9685C795B576}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimplePhotoService.Functions.PhotoProcessor", "src\SimplePhotoService.Functions.PhotoProcessor\SimplePhotoService.Functions.PhotoProcessor.csproj", "{E061C3AF-D27D-4EFF-90A5-F421B095D701}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimplePhotoService.Domain", "src\SimplePhotoService.Domain\SimplePhotoService.Domain.csproj", "{39D714BB-8ADD-4D5B-8FBD-307C740E3A91}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{A725BA9E-5068-4801-ADFF-DB62FEE886E5}"
@@ -39,6 +33,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Aspire", "Aspire", "{E1464B
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aspire.Hosting.AWS", "ext\aspire\src\Aspire.Hosting.AWS\Aspire.Hosting.AWS.csproj", "{CBC72898-868B-4804-9233-F7858A644388}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimplePhotoService.Controller", "src\SimplePhotoService.Controller\SimplePhotoService.Controller.csproj", "{81C674B6-3CCB-4697-BD49-1E32A583DA16}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,8 +44,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{081F80D9-3877-4826-8757-9685C795B576} = {8ADBD3B3-6EDA-438D-86AA-D6A9F01E7098}
-		{E061C3AF-D27D-4EFF-90A5-F421B095D701} = {8ADBD3B3-6EDA-438D-86AA-D6A9F01E7098}
 		{F0E24A7C-3ABD-4B1C-A44B-CF6A5B0702B1} = {A906D3AE-3EBF-412E-89C3-8766C8D46800}
 		{686C28CE-D30E-4727-9F45-CA7498920C58} = {A906D3AE-3EBF-412E-89C3-8766C8D46800}
 		{39D714BB-8ADD-4D5B-8FBD-307C740E3A91} = {A906D3AE-3EBF-412E-89C3-8766C8D46800}
@@ -60,20 +54,13 @@ Global
 		{14A94A23-C79C-4B51-987C-7A8D3DC534C6} = {0D146673-1DA9-4369-A4E1-6472D610F3F3}
 		{E1464B7D-1B4E-40E2-A312-ABABEAE845ED} = {0D146673-1DA9-4369-A4E1-6472D610F3F3}
 		{CBC72898-868B-4804-9233-F7858A644388} = {E1464B7D-1B4E-40E2-A312-ABABEAE845ED}
+		{81C674B6-3CCB-4697-BD49-1E32A583DA16} = {A906D3AE-3EBF-412E-89C3-8766C8D46800}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{F0E24A7C-3ABD-4B1C-A44B-CF6A5B0702B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F0E24A7C-3ABD-4B1C-A44B-CF6A5B0702B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F0E24A7C-3ABD-4B1C-A44B-CF6A5B0702B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F0E24A7C-3ABD-4B1C-A44B-CF6A5B0702B1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{081F80D9-3877-4826-8757-9685C795B576}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{081F80D9-3877-4826-8757-9685C795B576}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{081F80D9-3877-4826-8757-9685C795B576}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{081F80D9-3877-4826-8757-9685C795B576}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E061C3AF-D27D-4EFF-90A5-F421B095D701}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E061C3AF-D27D-4EFF-90A5-F421B095D701}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E061C3AF-D27D-4EFF-90A5-F421B095D701}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E061C3AF-D27D-4EFF-90A5-F421B095D701}.Release|Any CPU.Build.0 = Release|Any CPU
 		{39D714BB-8ADD-4D5B-8FBD-307C740E3A91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{39D714BB-8ADD-4D5B-8FBD-307C740E3A91}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{39D714BB-8ADD-4D5B-8FBD-307C740E3A91}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -110,5 +97,9 @@ Global
 		{CBC72898-868B-4804-9233-F7858A644388}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CBC72898-868B-4804-9233-F7858A644388}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CBC72898-868B-4804-9233-F7858A644388}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81C674B6-3CCB-4697-BD49-1E32A583DA16}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81C674B6-3CCB-4697-BD49-1E32A583DA16}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81C674B6-3CCB-4697-BD49-1E32A583DA16}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81C674B6-3CCB-4697-BD49-1E32A583DA16}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

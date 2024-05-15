@@ -4,6 +4,5 @@ namespace SimplePhotoService.Api.Contracts;
 
 public class UploadPhotoInput
 {
-    [Required]
-    public Guid? AlbumId { get; set; }
+    public int Count { get; set; } = 1;
 }

@@ -13,4 +13,8 @@ public sealed class Album : Entity<Guid>
     public string? Title { get; set; }
 
     public string? OwnerId { get; set; }
+
+    public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
+    
+    public DateTimeOffset LastUpdatedAt { get; set; } = DateTimeOffset.UtcNow;
 }

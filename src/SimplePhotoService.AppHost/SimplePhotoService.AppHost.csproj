@@ -16,6 +16,7 @@
     <ItemGroup>
         <ProjectReference Include="..\..\ext\aspire\src\Aspire.Hosting.AWS\Aspire.Hosting.AWS.csproj" IsAspireProjectResource="false" />
         <ProjectReference Include="..\SimplePhotoService.Api\SimplePhotoService.Api.csproj" />
+        <ProjectReference Include="..\SimplePhotoService.Controller\SimplePhotoService.Controller.csproj" />
     </ItemGroup>
 
 </Project>

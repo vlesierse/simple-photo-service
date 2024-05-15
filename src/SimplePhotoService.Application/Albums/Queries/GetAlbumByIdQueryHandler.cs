@@ -1,10 +1,10 @@
 using Mediator;
 using SimplePhotoService.Domain.Entities;
-using XaasKit.Domain.Repositories;
+using SimplePhotoService.Domain.Repositories;
 
 namespace SimplePhotoService.Application.Queries;
 
-public class GetAlbumByIdQueryHandler(IReadOnlyRepository<Album, Guid> repository) : IRequestHandler<GetAlbumByIdQuery, Album?>
+public class GetAlbumByIdQueryHandler(IAlbumRepository repository) : IRequestHandler<GetAlbumByIdQuery, Album?>
 {
     public async ValueTask<Album?> Handle(GetAlbumByIdQuery request, CancellationToken cancellationToken)
     {

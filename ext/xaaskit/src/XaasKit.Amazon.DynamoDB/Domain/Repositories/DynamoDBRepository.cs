@@ -43,7 +43,7 @@ public class DynamoDbRepository<TEntity>(IAmazonDynamoDB _client, IOptions<Dynam
     {
         var search = Table.Scan(new ScanFilter());
         var documents = await search.GetRemainingAsync(cancellationToken);
-        return documents.Select(FromDocument).ToList();
+        return FromDocuments(documents).ToList();
     }
 
     public override Task<List<TEntity>> GetPagedListAsync(int skip, int maxResults, string sorting,
@@ -85,6 +85,9 @@ public class DynamoDbRepository<TEntity>(IAmazonDynamoDB _client, IOptions<Dynam
         return result ?? throw new XaasKitException("Unable to deserialize document to entity");
     }
 
+    protected IEnumerable<TEntity> FromDocuments(IEnumerable<Document> documents)
+        => documents.Select(FromDocument);
+
     protected string ComposeItemKey(params object[] keys)
         => $"{GetKeyPrefix()}{Options.KeySeparator}{keys.JoinAsString(Options.KeySeparator)}";
 }
@@ -92,12 +95,12 @@ public class DynamoDbRepository<TEntity>(IAmazonDynamoDB _client, IOptions<Dynam
 public class DynamoDbRepository<TEntity, TKey>(IAmazonDynamoDB _client, IOptions<DynamoDBOptions> _options) : DynamoDbRepository<TEntity>(_client, _options), IRepository<TEntity, TKey>
     where TEntity : class, IEntity<TKey>
 {
-    public async Task<TEntity> GetAsync(TKey id, CancellationToken cancellationToken = default)
+    public virtual async Task<TEntity> GetAsync(TKey id, CancellationToken cancellationToken = default)
     {
         return await FindAsync(id, cancellationToken) ?? throw new EntityNotFoundException(typeof(TEntity), id);
     }
 
-    public async Task<TEntity?> FindAsync(TKey id, CancellationToken cancellationToken = default)
+    public virtual async Task<TEntity?> FindAsync(TKey id, CancellationToken cancellationToken = default)
     {
         var composedKey = ComposeItemKey(id!);
         var keys = new Dictionary<string, DynamoDBEntry>
@@ -109,7 +112,7 @@ public class DynamoDbRepository<TEntity, TKey>(IAmazonDynamoDB _client, IOptions
         return document == null ? null : FromDocument(document);
     }
 
-    public async Task<bool> DeleteAsync(TKey id, CancellationToken cancellationToken = default)
+    public virtual async Task<bool> DeleteAsync(TKey id, CancellationToken cancellationToken = default)
     {
         var composedKey = ComposeItemKey(id!);
         var keys = new Dictionary<string, DynamoDBEntry>

@@ -1,14 +1,14 @@
 using Mediator;
 using SimplePhotoService.Domain.Entities;
-using XaasKit.Domain.Repositories;
+using SimplePhotoService.Domain.Repositories;
 
 namespace SimplePhotoService.Application.Queries;
 
-public class ListAlbumsQueryHandler(IReadOnlyRepository<Album> repository) : IRequestHandler<ListAlbumsQuery, List<Album>>
+public class ListAlbumsQueryHandler(IAlbumRepository repository) : IRequestHandler<ListAlbumsQuery, IList<Album>>
 {
-    public async ValueTask<List<Album>> Handle(ListAlbumsQuery request, CancellationToken cancellationToken)
+    public async ValueTask<IList<Album>> Handle(ListAlbumsQuery query, CancellationToken cancellationToken)
     {
-        var result = await repository.GetListAsync(cancellationToken);
+        var result = await repository.ListAblumsForOwner(query.OwnerId, cancellationToken);
         return result;
     }
 }
