@@ -23,6 +23,8 @@
     <PackageVersion Include="AWSSDK.DynamoDBv2" Version="3.7.303.2" />
     <PackageVersion Include="AWSSDK.Extensions.NETCore.Setup" Version="3.7.300" />
     <PackageVersion Include="AWSSDK.S3" Version="3.7.307.29" />
+    <PackageVersion Include="AWSSDK.SSO" Version="3.7.300.91" />
+    <PackageVersion Include="AWSSDK.SSOOIDC" Version="3.7.302.2" />
     <PackageVersion Include="AWSSDK.SQS" Version="3.7.301.4" />
     <!-- Version together with Aspire -->
     <PackageVersion Include="Aspire.Hosting" Version="$(AspireVersion)" />

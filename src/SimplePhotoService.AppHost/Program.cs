@@ -5,7 +5,7 @@ using Amazon.CDK.AWS.S3;
 using Attribute = Amazon.CDK.AWS.DynamoDB.Attribute;
 
 var builder = DistributedApplication.CreateBuilder(args).WithAWSCDK();
-var config = builder.AddAWSSDKConfig().WithProfile("default");
+var config = builder.AddAWSSDKConfig().WithProfile("dev-labs");
 
 var stack = builder.AddStack("stack", stackName: "SimplePhotoService").WithReference(config);
 var table = stack
@@ -51,8 +51,8 @@ var api = builder.AddProject<Projects.SimplePhotoService_Api>("api")
     .WithReference(bucket, "AWS::Resources::Bucket")
     .WithReference(userPool, "AWS::Resources::Cognito");
 
-builder.AddProject<Projects.SimplePhotoService_Controller>("controller")
-    .WithReference(bucketNotifications, "AWS::Resources::Queue");
+/*builder.AddProject<Projects.SimplePhotoService_Controller>("controller")
+    .WithReference(bucketNotifications, "AWS::Resources::Queue");*/
 
 builder.AddNpmApp("frontend", "../../frontend", "dev")
     .WithEnvironment("VITE_API_HTTP", api.GetEndpoint("http"))
