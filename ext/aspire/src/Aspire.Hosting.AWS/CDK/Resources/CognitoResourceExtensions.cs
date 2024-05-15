@@ -42,6 +42,6 @@ public static class CognitoResourceExtensions
         where TDestination : IResourceWithEnvironment
     {
         var prefix = configSection.Replace(':', '_');
-        return builder.WithEnvironment($"{prefix}__UserPoolId", userPool, p => p.UserPoolId);
+        return builder.WithEnvironment($"{prefix}__UserPoolId", userPool, p => p.UserPoolId, "UserPoolId");
     }
 }

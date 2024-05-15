@@ -51,12 +51,14 @@ var api = builder.AddProject<Projects.SimplePhotoService_Api>("api")
     .WithReference(bucket, "AWS::Resources::Bucket")
     .WithReference(userPool, "AWS::Resources::Cognito");
 
-/*builder.AddProject<Projects.SimplePhotoService_Controller>("controller")
-    .WithReference(bucketNotifications, "AWS::Resources::Queue");*/
+builder.AddProject<Projects.SimplePhotoService_Controller>("controller")
+    .WithReference(table, "AWS::Resources::Table")
+    .WithReference(bucket, "AWS::Resources::Bucket")
+    .WithReference(bucketNotifications, "AWS::Resources::Queue");
 
 builder.AddNpmApp("frontend", "../../frontend", "dev")
     .WithEnvironment("VITE_API_HTTP", api.GetEndpoint("http"))
-    .WithEnvironment("VITE_AWS_USER_POOL_ID", userPool, c => c.UserPoolId)
+    .WithEnvironment("VITE_AWS_USER_POOL_ID", userPool, c => c.UserPoolId, "UserPoolId")
     .WithEnvironment("VITE_AWS_USER_POOL_CLIENT_ID", userPoolClient, c => c.UserPoolClientId)
     .WithHttpEndpoint(env: "PORT", port: 5173);
 

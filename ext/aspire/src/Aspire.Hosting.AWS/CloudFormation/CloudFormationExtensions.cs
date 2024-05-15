@@ -98,7 +98,7 @@ public static class CloudFormationExtensions
 
             ctx.Logger?.LogInformation("Getting CloudFormation stack output {Name} from resource {ResourceName}", stackOutputReference.Name, stackOutputReference.Resource.Name);
 
-            ctx.EnvironmentVariables[name] = await stackOutputReference.GetValueAsync(ctx.CancellationToken).ConfigureAwait(false) ?? "";
+            ctx.EnvironmentVariables[name] = (await stackOutputReference.GetValueAsync(ctx.CancellationToken).ConfigureAwait(false)) ?? "";
         });
     }
 

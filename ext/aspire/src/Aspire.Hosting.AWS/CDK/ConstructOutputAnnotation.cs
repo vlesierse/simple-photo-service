@@ -6,11 +6,11 @@ using Constructs;
 
 namespace Aspire.Hosting.AWS.CDK;
 
-internal sealed class ConstructOutputAnnotation<T>(string name, ConstructOutputDelegate<T> output)
-    : IConstructModifierAnnotation
+internal sealed class ConstructOutputAnnotation<T>(string outputName, ConstructOutputDelegate<T> output)
+    : IConstructModifierAnnotation, IConstructOutputAnnotation
     where T : IConstruct
 {
-    public string Name { get; } = name;
+    public string OutputName { get; } = outputName;
 
     public void ChangeConstruct(IConstruct construct)
     {
@@ -19,9 +19,9 @@ internal sealed class ConstructOutputAnnotation<T>(string name, ConstructOutputD
             stack = construct.Node.Scopes.OfType<Stack>().FirstOrDefault() ?? throw new InvalidOperationException("Construct is not part of a Stack");
         }
 
-        _ = new CfnOutput(stack, Name, new CfnOutputProps
+        _ = new CfnOutput(stack, OutputName, new CfnOutputProps
         {
-            Key = $"{construct.StackUniqueId()}{Name}",
+            Key = $"{construct.StackUniqueId()}{OutputName}",
             Value = output((T)construct)
         });
     }

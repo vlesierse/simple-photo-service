@@ -31,6 +31,6 @@ public static class SQSResourceExtensions
         where TDestination : IResourceWithEnvironment
     {
         var prefix = configSection.Replace(':', '_');
-        return builder.WithEnvironment($"{prefix}__QueueUrl", queue, t => t.QueueUrl);
+        return builder.WithEnvironment($"{prefix}__QueueUrl", queue, t => t.QueueUrl, "QueueUrl");
     }
 }

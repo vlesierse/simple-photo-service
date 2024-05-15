@@ -11,6 +11,8 @@
     <ItemGroup>
         <FrameworkReference Include="Microsoft.AspNetCore.App"/>
         <PackageReference Include="AWS.Messaging.Telemetry.OpenTelemetry" />
+        <PackageReference Include="AWSSDK.SSO" />
+        <PackageReference Include="AWSSDK.SSOOIDC" />
         <PackageReference Include="Microsoft.Extensions.Http.Resilience" />
         <PackageReference Include="Microsoft.Extensions.ServiceDiscovery"/>
         <PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" />

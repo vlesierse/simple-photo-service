@@ -53,6 +53,6 @@ public static class DynamoDBResourceExtensions
         where TDestination : IResourceWithEnvironment
     {
         var prefix = configSection.Replace(':', '_');
-        return builder.WithEnvironment($"{prefix}__TableName", table, t => t.TableName);
+        return builder.WithEnvironment($"{prefix}__TableName", table, t => t.TableName, "TableName");
     }
 }

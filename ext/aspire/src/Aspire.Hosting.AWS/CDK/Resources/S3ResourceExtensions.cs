@@ -74,6 +74,6 @@ public static class S3ResourceExtensions
         where TDestination : IResourceWithEnvironment
     {
         var prefix = configSection.Replace(':', '_');
-        return builder.WithEnvironment($"{prefix}__BucketName", bucket, t => t.BucketName);
+        return builder.WithEnvironment($"{prefix}__BucketName", bucket, t => t.BucketName, "BucketName");
     }
 }

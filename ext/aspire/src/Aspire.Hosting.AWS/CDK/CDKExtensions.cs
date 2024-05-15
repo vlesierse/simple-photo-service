@@ -8,6 +8,7 @@ using Aspire.Hosting.AWS.CDK;
 using Aspire.Hosting.AWS.CloudFormation;
 using Constructs;
 using Microsoft.Extensions.Logging;
+using System.Linq.Expressions;
 using Stack = Amazon.CDK.Stack;
 using StackResource = Aspire.Hosting.AWS.CDK.StackResource;
 
@@ -101,10 +102,10 @@ public static class CDKExtensions
     }
 
     /// <summary>
-    /// Gets a reference to a  output from the CloudFormation stack.
+    /// Gets a reference to an output from the CloudFormation stack.
     /// </summary>
     /// <param name="builder">The resource builder.</param>
-    /// <param name="name"></param>
+    /// <param name="name">The name of the output.</param>
     /// <param name="outputDelegate"></param>
     public static StackOutputReference GetOutput<T>(this IResourceBuilder<IConstructResource<T>> builder, string name, ConstructOutputDelegate<T> outputDelegate)
         where T : Construct
@@ -116,7 +117,7 @@ public static class CDKExtensions
     /// <summary>
     /// The AWS SDK service client configuration used to create the CloudFormation service client.
     /// </summary>
-    /// <param name="builder"></param>
+    /// <param name="builder">The resource builder.</param>
     /// <param name="awsSdkConfig">The name of the AWS credential profile.</param>
     public static IResourceBuilder<T> WithReference<T>(this IResourceBuilder<T> builder, IAWSSDKConfig awsSdkConfig)
         where T : IStackResource
@@ -129,7 +130,7 @@ public static class CDKExtensions
     /// Add a reference of a CloudFormations stack to a project. The output parameters of the CloudFormation stack are added to the project IConfiguration.
     /// </summary>
     /// <typeparam name="TDestination"></typeparam>
-    /// <param name="builder"></param>
+    /// <param name="builder">The resource builder.</param>
     /// <param name="stack">The stack resource.</param>
     /// <param name="configSection">The config section in IConfiguration to add the output parameters.</param>
     /// <returns></returns>
@@ -196,19 +197,22 @@ public static class CDKExtensions
     }
 
     /// <summary>
-    ///
+    /// Add a reference of a construct to a project. The output parameters of the CloudFormation stack are added as environment variable.
     /// </summary>
-    /// <param name="builder"></param>
-    /// <param name="name"></param>
-    /// <param name="source"></param>
-    /// <param name="outputDelegate"></param>
-    /// <returns></returns>
-    public static IResourceBuilder<TDestination> WithEnvironment<TDestination, TConstruct>(this IResourceBuilder<TDestination> builder, string name, IResourceBuilder<IConstructResource<TConstruct>> source, ConstructOutputDelegate<TConstruct> outputDelegate)
+    /// <param name="builder">The resource builder.</param>
+    /// <param name="name">The name of the environment variable.</param>
+    /// <param name="source">The construct resource.</param>
+    /// <param name="outputDelegate">The construct output resolver.</param>
+    /// <param name="outputName">The name of the construct output.</param>
+    public static IResourceBuilder<TDestination> WithEnvironment<TDestination, TConstruct>(this IResourceBuilder<TDestination> builder, string name, IResourceBuilder<IConstructResource<TConstruct>> source, ConstructOutputDelegate<TConstruct> outputDelegate, string? outputName = default)
         where TConstruct : IConstruct
         where TDestination : IResourceWithEnvironment
     {
-        var constructName = name.Replace("_", string.Empty);
-        source.WithAnnotation(new ConstructOutputAnnotation<TConstruct>(constructName, outputDelegate));
-        return builder.WithEnvironment(name, new StackOutputReference(source.Resource.Construct.StackUniqueId() + constructName, source.Resource.FindParentOfType<StackResource>()));
+        outputName ??= name.Replace("_", string.Empty);
+        if (!source.Resource.Annotations.OfType<IConstructOutputAnnotation>().Where(annotation => annotation.OutputName == outputName).Any())
+        {
+            source.WithAnnotation(new ConstructOutputAnnotation<TConstruct>(outputName, outputDelegate));
+        }
+        return builder.WithEnvironment(name, new StackOutputReference(source.Resource.Construct.StackUniqueId() + outputName, source.Resource.FindParentOfType<StackResource>()));
     }
 }

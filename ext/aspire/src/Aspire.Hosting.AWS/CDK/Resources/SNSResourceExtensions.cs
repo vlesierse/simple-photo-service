@@ -43,6 +43,6 @@ public static class SNSResourceExtensions
         where TDestination : IResourceWithEnvironment
     {
         var prefix = configSection.Replace(':', '_');
-        return builder.WithEnvironment($"{prefix}__TopicArn", topic, t => t.TopicArn);
+        return builder.WithEnvironment($"{prefix}__TopicArn", topic, t => t.TopicArn, "TopicArn");
     }
 }
