@@ -21,9 +21,9 @@ export const ViewAlbum = () => {
     sections: [
       {
         content: (photo) => (
-          <Container>
+          <div>
             {photo.url ? (
-              <img src={photo.url} />
+              <img src={photo.thumbnails?.medium?.url ?? photo.url} />
             ) : (
               <>
                 <input
@@ -40,14 +40,17 @@ export const ViewAlbum = () => {
                 />
               </>
             )}
-          </Container>
+          </div>
         ),
       },
     ],
   };
 
   const handleFileUpload = async (files: FileList | null) => {
-    const restOperation = post({
+    const file = files?.[0];
+    if (!file) return;
+    setPhotos([{ id: "", url: URL.createObjectURL(file) }, ...photos]);
+    /*const restOperation = post({
       apiName: "AppApi",
       path: `/albums/${id}/photos`,
     });
@@ -55,23 +58,29 @@ export const ViewAlbum = () => {
     const upload = (await response.body.json()) as PhotoUpload;
     await fetch(upload.url, {
       method: "PUT",
-      body: files?.[0],
-    });
+      body: file,
+    });*/
   };
 
   const isMounted = useRef<boolean>(false);
   useEffect(() => {
     if (isMounted.current) {
       (async () => {
-        const restOperation = get({
+        const getAlbumOperation = get({
           apiName: "AppApi",
           path: "/albums/" + id,
         });
-        const response = await restOperation.response;
-        const json = await response.body.json();
-        const album = json as Album;
-        setAlbum(json as Album);
-        setPhotos([...album.photos, { id: "" }]);
+        const getPhotosOperation = get({
+          apiName: "AppApi",
+          path: "/albums/" + id + "/photos",
+        });
+        const albumResponse = await getAlbumOperation.response;
+        const photosResponse = await getPhotosOperation.response;
+        setAlbum((await albumResponse.body.json()) as Album);
+        setPhotos([
+          ...((await photosResponse.body.json()) as Photo[]),
+          { id: "" },
+        ]);
       })();
     }
     isMounted.current = true;

@@ -11,9 +11,12 @@
       <PackageReference Include="Amazon.Lambda.S3Events" />
       <PackageReference Include="AWSSDK.SQS" />
       <PackageReference Include="Microsoft.Extensions.Hosting" />
+      <PackageReference Include="SixLabors.ImageSharp" />
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\SimplePhotoService.Application\SimplePhotoService.Application.csproj" />
+      <ProjectReference Include="..\SimplePhotoService.Infrastructure\SimplePhotoService.Infrastructure.csproj" />
       <ProjectReference Include="..\SimplePhotoService.ServiceDefaults\SimplePhotoService.ServiceDefaults.csproj" />
     </ItemGroup>
 

@@ -21,7 +21,7 @@ public class PhotoRepository(IAmazonDynamoDB _client, IOptions<DynamoDBOptions> 
     public async Task<IList<Photo>> ListPhotosInAlbum(Guid albumId, CancellationToken cancellationToken = default)
     {
         var filter = new QueryFilter("SK", QueryOperator.BeginsWith, "P#");
-        var results = await Table.Query(albumId, filter).GetRemainingAsync(cancellationToken);
+        var results = await Table.Query($"A#{albumId}", filter).GetRemainingAsync(cancellationToken);
         return FromDocuments(results).ToList();
     }
 }

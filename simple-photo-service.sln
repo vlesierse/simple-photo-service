@@ -35,6 +35,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aspire.Hosting.AWS", "ext\a
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimplePhotoService.Controller", "src\SimplePhotoService.Controller\SimplePhotoService.Controller.csproj", "{81C674B6-3CCB-4697-BD49-1E32A583DA16}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimplePhotoService.Api.Tests", "test\SimplePhotoService.Api.Tests\SimplePhotoService.Api.Tests.csproj", "{9BE89106-E265-465F-968E-29B27D63E4DB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,7 @@ Global
 		{E1464B7D-1B4E-40E2-A312-ABABEAE845ED} = {0D146673-1DA9-4369-A4E1-6472D610F3F3}
 		{CBC72898-868B-4804-9233-F7858A644388} = {E1464B7D-1B4E-40E2-A312-ABABEAE845ED}
 		{81C674B6-3CCB-4697-BD49-1E32A583DA16} = {A906D3AE-3EBF-412E-89C3-8766C8D46800}
+		{9BE89106-E265-465F-968E-29B27D63E4DB} = {A725BA9E-5068-4801-ADFF-DB62FEE886E5}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{F0E24A7C-3ABD-4B1C-A44B-CF6A5B0702B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -101,5 +104,9 @@ Global
 		{81C674B6-3CCB-4697-BD49-1E32A583DA16}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{81C674B6-3CCB-4697-BD49-1E32A583DA16}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{81C674B6-3CCB-4697-BD49-1E32A583DA16}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9BE89106-E265-465F-968E-29B27D63E4DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9BE89106-E265-465F-968E-29B27D63E4DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9BE89106-E265-465F-968E-29B27D63E4DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9BE89106-E265-465F-968E-29B27D63E4DB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

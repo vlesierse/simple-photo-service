@@ -5,5 +5,5 @@ namespace SimplePhotoService.Api.Contracts;
 public class CreateAlbumInput
 {
     [Required]
-    public string? Title { get; set; }
+    public required string Title { get; set; }
 }
