@@ -5,7 +5,7 @@ using Amazon.CDK.AWS.S3;
 using Attribute = Amazon.CDK.AWS.DynamoDB.Attribute;
 
 var builder = DistributedApplication.CreateBuilder(args).WithAWSCDK();
-var config = builder.AddAWSSDKConfig().WithProfile("dev-labs");
+var config = builder.AddAWSSDKConfig().WithProfile("default");
 
 var stack = builder.AddStack("stack", stackName: "SimplePhotoService").WithReference(config);
 var table = stack
@@ -35,7 +35,7 @@ var bucket = stack.AddS3Bucket("bucket", new BucketProps
         ],
         RemovalPolicy = RemovalPolicy.DESTROY
     })
-    .AddObjectCreatedNotifications(bucketNotifications, new NotificationKeyFilter { Prefix = "uploads/"});
+    .AddObjectCreatedNotifications(bucketNotifications, new NotificationKeyFilter { Prefix = "upload/"});
 
 var userPool = stack.AddCognitoUserPool("userpool", new UserPoolProps
 {
