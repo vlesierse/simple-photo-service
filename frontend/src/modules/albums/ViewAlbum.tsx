@@ -23,7 +23,10 @@ export const ViewAlbum = () => {
         content: (photo) => (
           <div>
             {photo.url ? (
-              <img src={photo.thumbnails?.medium?.url ?? photo.url} />
+              <img
+                style={{ width: "100%", height: "auto" }}
+                src={photo.thumbnails?.medium?.url ?? photo.url}
+              />
             ) : (
               <>
                 <input
@@ -50,7 +53,7 @@ export const ViewAlbum = () => {
     const file = files?.[0];
     if (!file) return;
     setPhotos([{ id: "", url: URL.createObjectURL(file) }, ...photos]);
-    /*const restOperation = post({
+    const restOperation = post({
       apiName: "AppApi",
       path: `/albums/${id}/photos`,
     });
@@ -59,7 +62,7 @@ export const ViewAlbum = () => {
     await fetch(upload.url, {
       method: "PUT",
       body: file,
-    });*/
+    });
   };
 
   const isMounted = useRef<boolean>(false);
