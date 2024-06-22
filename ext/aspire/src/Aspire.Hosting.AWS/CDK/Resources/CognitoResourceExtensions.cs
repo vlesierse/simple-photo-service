@@ -10,13 +10,16 @@ namespace Aspire.Hosting;
 /// </summary>
 public static class CognitoResourceExtensions
 {
+
+    private const string UserPoolIdOutputName = "UserPoolId";
+
     /// <summary>
     /// Adds an Amazon Cognito user pool.
     /// </summary>
-    /// <param name="builder">The builder for the distributed application.</param>
+    /// <param name="builder">The builder for the AWS CDK stack.</param>
     /// <param name="name">The name of the resource.</param>
     /// <param name="props">The properties of the userpool.</param>
-    public static IResourceBuilder<IConstructResource<UserPool>> AddCognitoUserPool(this IResourceBuilder<IResourceWithConstruct> builder, string name, IUserPoolProps? props = null)
+    public static IResourceBuilder<IConstructResource<UserPool>> AddCognitoUserPool(this IResourceBuilder<IStackResource> builder, string name, IUserPoolProps? props = null)
     {
         return builder.AddConstruct(name, scope => new UserPool(scope, name, props));
     }
@@ -27,21 +30,22 @@ public static class CognitoResourceExtensions
     /// <param name="builder">The builder for the user pool.</param>
     /// <param name="name">the name of the resource.</param>
     /// <param name="options">The options of the client.</param>
-    public static IResourceBuilder<IConstructResource<UserPoolClient>> AddClient(this IResourceBuilder<IConstructResource<UserPool>> builder, string name, IUserPoolClientOptions? options)
+    public static IResourceBuilder<IConstructResource<UserPoolClient>> AddClient(this IResourceBuilder<IConstructResource<UserPool>> builder, string name, IUserPoolClientOptions? options = null)
     {
-        return builder.AddConstruct(name, scope => builder.Resource.Construct.AddClient(name, options));
+        return builder.AddConstruct(name, _ => builder.Resource.Construct.AddClient(name, options));
     }
-    
+
     /// <summary>
     /// Adds a reference of an Amazon Cognito user pool to a project. The output parameters of the user pool are added to the project IConfiguration.
     /// </summary>
     /// <param name="builder">The builder for the resource.</param>
     /// <param name="userPool">The Amazon Cognito user pool resource.</param>
     /// <param name="configSection">The optional config section in IConfiguration to add the output parameters.</param>
-    public static IResourceBuilder<TDestination> WithReference<TDestination>(this IResourceBuilder<TDestination> builder, IResourceBuilder<IConstructResource<UserPool>> userPool, string configSection = Constants.DefaultConfigSection)
+    public static IResourceBuilder<TDestination> WithReference<TDestination>(this IResourceBuilder<TDestination> builder, IResourceBuilder<IConstructResource<UserPool>> userPool, string? configSection = null)
         where TDestination : IResourceWithEnvironment
     {
-        var prefix = configSection.Replace(':', '_');
-        return builder.WithEnvironment($"{prefix}__UserPoolId", userPool, p => p.UserPoolId, "UserPoolId");
+        configSection ??= $"{Constants.DefaultConfigSection}:{userPool.Resource.Name}";
+        var prefix = configSection.ToEnvironmentVariables();
+        return builder.WithEnvironment($"{prefix}__{UserPoolIdOutputName}", userPool, p => p.UserPoolId, UserPoolIdOutputName);
     }
 }

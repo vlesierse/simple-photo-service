@@ -8,5 +8,10 @@ namespace Aspire.Hosting.AWS.CDK;
 /// <summary>
 ///
 /// </summary>
-/// <typeparam name="T"></typeparam>
-public delegate T StackBuilderDelegate<out T>(App app) where T : Stack;
+public interface ICDKResource : IStackResource
+{
+    /// <summary>
+    ///
+    /// </summary>
+    App App { get; }
+}

@@ -6,11 +6,11 @@ using Constructs;
 
 namespace Aspire.Hosting.AWS.CDK;
 
-internal sealed class ConstructOutputAnnotation<T>(string outputName, ConstructOutputDelegate<T> output)
+internal sealed class ConstructOutputAnnotation<T>(string name, ConstructOutputDelegate<T> output)
     : IConstructModifierAnnotation, IConstructOutputAnnotation
     where T : IConstruct
 {
-    public string OutputName { get; } = outputName;
+    public string OutputName { get; } = name;
 
     public void ChangeConstruct(IConstruct construct)
     {

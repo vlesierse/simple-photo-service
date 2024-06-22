@@ -10,13 +10,16 @@ namespace Aspire.Hosting;
 /// </summary>
 public static class DynamoDBResourceExtensions
 {
+
+    private const string TableNameOutputName = "TableName";
+
     /// <summary>
     /// Adds an Amazon DynamoDB table.
     /// </summary>
-    /// <param name="builder">The builder for the distributed application.</param>
+    /// <param name="builder">The builder for the AWS CDK stack.</param>
     /// <param name="name">The name of the resource.</param>
     /// <param name="props">The properties of the table.</param>
-    public static IResourceBuilder<IConstructResource<Table>> AddDynamoDBTable(this IResourceBuilder<IResourceWithConstruct> builder, string name, ITableProps props)
+    public static IResourceBuilder<IConstructResource<Table>> AddDynamoDBTable(this IResourceBuilder<IStackResource> builder, string name, ITableProps props)
     {
         return builder.AddConstruct(name, scope => new Table(scope, name, props));
     }
@@ -44,15 +47,16 @@ public static class DynamoDBResourceExtensions
     }
 
     /// <summary>
-    /// Adds a reference of an Amazon DynamoDB table to a project. The output parameters of the Amazon DynamoDB table are added to the project IConfiguration.
+    /// Adds a reference of an Amazon DynamoDB table to a project. The output parameters of the table are added to the project IConfiguration.
     /// </summary>
     /// <param name="builder">The builder for the resource.</param>
     /// <param name="table">The Amazon DynamoDB table resource.</param>
     /// <param name="configSection">The optional config section in IConfiguration to add the output parameters.</param>
-    public static IResourceBuilder<TDestination> WithReference<TDestination>(this IResourceBuilder<TDestination> builder, IResourceBuilder<IConstructResource<Table>> table, string configSection = Constants.DefaultConfigSection)
+    public static IResourceBuilder<TDestination> WithReference<TDestination>(this IResourceBuilder<TDestination> builder, IResourceBuilder<IConstructResource<Table>> table, string? configSection = null)
         where TDestination : IResourceWithEnvironment
     {
-        var prefix = configSection.Replace(':', '_');
-        return builder.WithEnvironment($"{prefix}__TableName", table, t => t.TableName, "TableName");
+        configSection ??= $"{Constants.DefaultConfigSection}:{table.Resource.Name}";
+        var prefix = configSection.ToEnvironmentVariables();
+        return builder.WithEnvironment($"{prefix}__{TableNameOutputName}", table, t => t.TableName, TableNameOutputName);
     }
 }
