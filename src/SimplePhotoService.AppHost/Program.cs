@@ -5,10 +5,10 @@ using Amazon.CDK.AWS.S3;
 using Attribute = Amazon.CDK.AWS.DynamoDB.Attribute;
 
 var builder = DistributedApplication.CreateBuilder(args);
-var config = builder.AddAWSSDKConfig().WithProfile("vinles+labs-Admin");
+var config = builder.AddAWSSDKConfig().WithProfile("default");
 
-var cdk = builder.AddAWSCDK("cdk", stackName: "SimplePhotoService").WithReference(config);
-var table = cdk
+var stack = builder.AddAWSCDKStack("stack", stackName: "SimplePhotoService").WithReference(config);
+var table = stack
     .AddDynamoDBTable("table", new TableProps
     {
         PartitionKey = new Attribute { Name = "PK", Type = AttributeType.STRING },
@@ -22,8 +22,8 @@ var table = cdk
             SortKey = new Attribute { Name = "OwnerSK", Type = AttributeType.STRING },
             ProjectionType = ProjectionType.ALL
         });
-var bucketNotifications = cdk.AddSQSQueue("queue");
-var bucket = cdk.AddS3Bucket("bucket", new BucketProps
+var bucketNotifications = stack.AddSQSQueue("queue");
+var bucket = stack.AddS3Bucket("bucket", new BucketProps
     {
         Cors = [
             new CorsRule
@@ -37,7 +37,7 @@ var bucket = cdk.AddS3Bucket("bucket", new BucketProps
     })
     .AddObjectCreatedNotification(bucketNotifications, new NotificationKeyFilter { Prefix = "upload/"});
 
-var userPool = cdk.AddCognitoUserPool("userpool", new UserPoolProps
+var userPool = stack.AddCognitoUserPool("userpool", new UserPoolProps
 {
     UserPoolName = $"SimplePhotoService",
     SignInAliases = new SignInAliases { Email = true, Username = false },
