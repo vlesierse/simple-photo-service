@@ -5,7 +5,7 @@
     <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
     <AspnetVersion>8.0.0</AspnetVersion>
     <RuntimeVersion>8.0.1</RuntimeVersion>
-    <AspireVersion>8.0.1</AspireVersion>
+    <AspireVersion>8.2.0</AspireVersion>
     <OpenTelemetryVersion>1.8.1</OpenTelemetryVersion>
   </PropertyGroup>
   <ItemGroup>
@@ -56,6 +56,6 @@
     <PackageVersion Include="JetBrains.Annotations" Version="2023.3.0" />
     <PackageVersion Include="Mediator.Abstractions" Version="2.1.7" />
     <PackageVersion Include="Mediator.SourceGenerator" Version="2.1.7" />
-    <PackageVersion Include="SixLabors.ImageSharp" Version="3.1.4" />
+    <PackageVersion Include="SixLabors.ImageSharp" Version="3.1.5" />
   </ItemGroup>
 </Project>
