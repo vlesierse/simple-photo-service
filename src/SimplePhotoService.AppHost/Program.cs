@@ -46,6 +46,8 @@ var userPool = stack.AddCognitoUserPool("userpool", new UserPoolProps
 });
 var userPoolClient = userPool.AddClient("client", new UserPoolClientOptions());
 
+stack.AddS3Bucket("test", new BucketProps() { RemovalPolicy = RemovalPolicy.DESTROY });
+
 var api = builder.AddProject<Projects.SimplePhotoService_Api>("api")
     .WithReference(table, "AWS::Resources::Table")
     .WithReference(bucket, "AWS::Resources::Bucket")
