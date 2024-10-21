@@ -1,5 +1,12 @@
+using Amazon.CDK.AWS.EC2;
+using Amazon.CDK.AWS.ECS;
+using Amazon.CDK.AWS.ECS.Patterns;
+using Amazon.CDK.AWS.IAM;
+using Amazon.CDK.AWS.S3;
+using Amazon.CDK.AWS.S3.Notifications;
+using Amazon.CDK.AWS.SQS;
 using Constructs;
-using SimplePhotoService.CDK.Extensions;
+using HealthCheck = Amazon.CDK.AWS.ElasticLoadBalancingV2.HealthCheck;
 using Stack = Amazon.CDK.Stack;
 
 namespace SimplePhotoService.CDK;
@@ -11,7 +18,7 @@ public interface IApplicationStack;
 public class ApplicationStack : Stack, IApplicationStack
 {
     private readonly Table _table;
-    private readonly HttpApi _api;
+    private readonly Bucket _bucket;
     private readonly UserPool _userPool;
     private readonly IEnumerable<IUserPoolClient> _userPoolWebClients;
     
@@ -20,47 +27,93 @@ public class ApplicationStack : Stack, IApplicationStack
     public ApplicationStack(Construct scope, string id, ApplicationStackProps props)
         : base(scope, id, props)
     {
+        var environmentName = this.GetEnvironmentName();
+        
         _table = CreateTable();
+        _bucket = CreateBucket();
         (_userPool, _userPoolWebClients) = CreateUserPool();
-        _api = CreateApi();
+        var cluster = CreateCluster();
+        CreateApiService(cluster);
+        CreateControllerService(cluster, _bucket);
         // Expose Stack properties for external referencing
         TableName = _table.TableName;
     }
 
-    private HttpApi CreateApi()
+    private ICluster CreateCluster()
     {
         var environmentName = this.GetEnvironmentName();
-        var apiFunction = new DotNetFunction(this, "ApiFunction", new DotNetFunctionProps
+        var vpc = new Vpc(this, "VPC");
+        return new Cluster(this, "Cluster", new ClusterProps
         {
-            ProjectDir = "src/SimplePhotoService.Api",
-            Runtime = Runtime.DOTNET_8,
-            Environment = new Dictionary<string, string>() {
-                { "SimplePhotoService__AmazonDynamoDB__TableNamePrefix", $"SimplePhotoService-{environmentName}-" }
-            },
-            FunctionName = $"SimplePhotoService-{environmentName}-Api",
-            Timeout = Duration.Seconds(10),
-            LogRetention = this.IsDevelopment() ? RetentionDays.ONE_DAY : RetentionDays.ONE_MONTH
+            ClusterName = $"SimplePhotoService-{environmentName}",
+            Vpc = vpc
         });
-        var api = new HttpApi(this, "Api", new HttpApiProps
-        {
-            ApiName = $"SimplePhotoService-{environmentName}",
-            DefaultIntegration = new HttpLambdaIntegration("ApiIntegration", apiFunction),
-            DefaultAuthorizer = new HttpUserPoolAuthorizer("ApiAuthorizer", _userPool, new HttpUserPoolAuthorizerProps
+    }
+
+    private void CreateApiService(ICluster cluster)
+    {
+        var environmentName = this.GetEnvironmentName();
+        var service = new ApplicationLoadBalancedFargateService(this, "ApiService",
+            new ApplicationLoadBalancedFargateServiceProps
             {
-                UserPoolClients = _userPoolWebClients.ToArray()
-            }),
-            CorsPreflight = new CorsPreflightOptions
+                Cluster = cluster,
+                ServiceName = $"SimplePhotoService-{environmentName}-Api",
+                TaskImageOptions = new ApplicationLoadBalancedTaskImageOptions
+                {
+                    Image = ContainerImage.FromAsset(".",
+                        new AssetImageProps { File = "src/SimplePhotoService.Api/Dockerfile" }),
+                    Environment = new Dictionary<string, string>
+                    {
+                        { "AWS__Resources__Table__TableName", _table.TableName },
+                        { "AWS__Resources__Bucket__BucketName", _bucket.BucketName },
+                        { "AWS__Resources__Cognito__UserPoolId", _userPool.UserPoolId }
+                    },
+                    ContainerPort = 8080
+                },
+                RuntimePlatform = new RuntimePlatform
+                {
+                    CpuArchitecture = CpuArchitecture.ARM64
+                },
+                PublicLoadBalancer = true,
+                MemoryLimitMiB = 1024,
+                Cpu = 512,
+                DesiredCount = 1,
+                ListenerPort = 80
+            });
+        service.TargetGroup.ConfigureHealthCheck(new HealthCheck { Path = "/health"});
+        _bucket.GrantReadWrite(service.TaskDefinition.TaskRole);
+        _table.GrantReadWriteData(service.TaskDefinition.TaskRole);
+    }
+
+    private void CreateControllerService(ICluster cluster, IBucket bucket)
+    {
+        var queue = new Queue(this, "BucketNotificationsQueue");
+        bucket.AddObjectCreatedNotification(new SqsDestination(queue), new NotificationKeyFilter { Prefix = "upload/"});
+        var environmentName = this.GetEnvironmentName();
+        var service = new QueueProcessingFargateService(this, "ControllerService",
+            new QueueProcessingFargateServiceProps()
             {
-                AllowHeaders = ["Authorization"],
-                AllowMethods = [CorsHttpMethod.ANY] ,
-                AllowOrigins = ["*"],
-                //MaxAge = Duration.Minutes(10)
-            }
-        });
-        api.AddCorsPreflightRoute();
-        _table.GrantReadWriteData(apiFunction);
-        _ = new CfnOutput(this, "AWSApiEndpointUrl", new CfnOutputProps { Value = api.Url ?? api.ApiEndpoint });
-        return api;
+                Cluster = cluster,
+                ServiceName = $"SimplePhotoService-{environmentName}-Controller",
+                Image = ContainerImage.FromAsset(".", new AssetImageProps { File  = "src/SimplePhotoService.Controller/Dockerfile"}),
+                Environment = new Dictionary<string, string>() {
+                    { "AWS__Resources__Table__TableName", _table.TableName },
+                    { "AWS__Resources__Bucket__BucketName", _bucket.BucketName },
+                    { "AWS__Resources__Queue__QueueUrl", queue.QueueUrl },
+                },
+                MemoryLimitMiB = 1024,
+                Cpu = 512,
+                Queue = queue,
+                RuntimePlatform = new RuntimePlatform
+                {
+                    CpuArchitecture = CpuArchitecture.ARM64
+                }
+            });
+        _table.GrantReadWriteData(service.TaskDefinition.TaskRole);
+        _bucket.GrantReadWrite(service.TaskDefinition.TaskRole);
+        queue.GrantConsumeMessages(service.TaskDefinition.TaskRole);
+        service.TaskDefinition.TaskRole.AddManagedPolicy(ManagedPolicy.FromAwsManagedPolicyName("AmazonBedrockFullAccess"));
+        service.TaskDefinition.TaskRole.AddManagedPolicy(ManagedPolicy.FromAwsManagedPolicyName("AmazonRekognitionFullAccess"));
     }
     
     private Table CreateTable()
@@ -84,6 +137,15 @@ public class ApplicationStack : Stack, IApplicationStack
         return table;
     }
 
+    private Bucket CreateBucket()
+    {
+        return new Bucket(this, "ContentBucket", new BucketProps
+        {
+            RemovalPolicy = this.IsDevelopment() ? RemovalPolicy.DESTROY : RemovalPolicy.RETAIN,
+            AutoDeleteObjects = this.IsDevelopment()
+        });
+    }
+    
     private (UserPool userPool, IEnumerable<IUserPoolClient> userPoolClients ) CreateUserPool()
     {
         var environmentName = this.GetEnvironmentName();
@@ -95,8 +157,8 @@ public class ApplicationStack : Stack, IApplicationStack
             RemovalPolicy = this.IsDevelopment() ? RemovalPolicy.DESTROY : RemovalPolicy.RETAIN
         });
         var webClient = userPool.AddClient("WebClient");
-        _ = new CfnOutput(this, "AWSUserPoolsUserPoolId", new CfnOutputProps { Value = userPool.UserPoolId });
-        _ = new CfnOutput(this, "AWSUserPoolsWebClientId", new CfnOutputProps { Value = webClient.UserPoolClientId });
+        new CfnOutput(this, "AWSUserPoolsUserPoolId", new CfnOutputProps { Value = userPool.UserPoolId });
+        new CfnOutput(this, "AWSUserPoolsWebClientId", new CfnOutputProps { Value = webClient.UserPoolClientId });
         return (userPool, new [] { webClient });
     }
 }

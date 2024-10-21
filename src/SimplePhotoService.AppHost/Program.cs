@@ -5,7 +5,7 @@ using Amazon.CDK.AWS.S3;
 using Attribute = Amazon.CDK.AWS.DynamoDB.Attribute;
 
 var builder = DistributedApplication.CreateBuilder(args);
-var config = builder.AddAWSSDKConfig().WithProfile("default");
+var config = builder.AddAWSSDKConfig().WithProfile("vinles+labs-Admin");
 
 var stack = builder.AddAWSCDKStack("stack", stackName: "SimplePhotoService").WithReference(config);
 var table = stack
@@ -54,7 +54,8 @@ var api = builder.AddProject<Projects.SimplePhotoService_Api>("api")
 builder.AddProject<Projects.SimplePhotoService_Controller>("controller")
     .WithReference(table, "AWS::Resources::Table")
     .WithReference(bucket, "AWS::Resources::Bucket")
-    .WithReference(bucketNotifications, "AWS::Resources::Queue");
+    .WithReference(bucketNotifications, "AWS::Resources::Queue")
+    .WithEnvironment(e => e.EnvironmentVariables.Add("Processors__SmartCrop__CropLabel", "Food"));
 
 builder.AddNpmApp("frontend", "../../frontend", "dev")
     .WithEnvironment("VITE_API_HTTP", api.GetEndpoint("http"))

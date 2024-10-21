@@ -7,6 +7,6 @@ var environmentName = app.GetEnvironmentName();
 Tags.Of(app).Add("application", "SimplePhotoService");
 Tags.Of(app).Add("environment", environmentName);
 
-var _ = new ApplicationStack(app, $"SimplePhotoService-Application-{environmentName}", new ApplicationStackProps());
+var _ = new ApplicationStack(app, $"SimplePhotoService-{environmentName}", new ApplicationStackProps());
 
 app.Synth();

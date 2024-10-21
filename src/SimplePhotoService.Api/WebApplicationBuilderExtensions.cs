@@ -11,16 +11,13 @@ public static class WebApplicationBuilderExtensions
     {
         # region CORS
         
-        if (builder.Environment.IsDevelopment())
+        _ = builder.Services.AddCors(options =>
         {
-            _ = builder.Services.AddCors(options =>
+            options.AddDefaultPolicy(policy =>
             {
-                options.AddDefaultPolicy(policy =>
-                {
-                    policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin();
-                });
+                policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin();
             });
-        }
+        });
         
         #endregion
         

@@ -7,12 +7,11 @@ public static class WebApplicationExtensions
 {
     public static WebApplication ConfigureApplication(this WebApplication app, IWebHostEnvironment environment)
     {
+        _ = app.MapDefaultEndpoints();
+        
         #region Security
         
-        if (environment.IsDevelopment())
-        {
-            app.UseCors();
-        }
+        app.UseCors();
         
         #endregion
 

@@ -5,11 +5,14 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <ContainerImage>simplephotoservice-controller</ContainerImage>
     </PropertyGroup>
 
     <ItemGroup>
       <PackageReference Include="Amazon.Lambda.S3Events" />
+      <PackageReference Include="AWSSDK.BedrockRuntime" />
       <PackageReference Include="AWSSDK.SQS" />
+      <PackageReference Include="AWSSDK.Rekognition" />
       <PackageReference Include="Microsoft.Extensions.Hosting" />
       <PackageReference Include="SixLabors.ImageSharp" />
     </ItemGroup>

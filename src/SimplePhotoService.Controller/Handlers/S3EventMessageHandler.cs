@@ -1,16 +1,20 @@
 using System.Text.Json;
 using Amazon.SQS.Model;
 using Microsoft.Extensions.Logging;
+using SimplePhotoService.Controller.Processing;
 using SimplePhotoService.Domain.Entities;
 using SimplePhotoService.Domain.Repositories;
 using SimplePhotoService.Infrastructure.Storage;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
-using SixLabors.ImageSharp.Processing.Processors.Transforms;
 
 namespace SimplePhotoService.Controller.Handlers;
 
-public class S3EventMessageHandler(IObjectStore objectStore, IPhotoRepository photoRepository, ILogger<S3EventMessageHandler> logger) : IMessageHandler
+public class S3EventMessageHandler(
+    IObjectStore objectStore,
+    IPhotoRepository photoRepository,
+    IEnumerable<IImageProcessor> imageProcessors,
+    ILogger<S3EventMessageHandler> logger) : IMessageHandler
 {
 
     private static readonly JsonSerializerOptions SerializerOptions = new()
@@ -39,23 +43,26 @@ public class S3EventMessageHandler(IObjectStore objectStore, IPhotoRepository ph
             var photoUrl = $"s3://{record.S3.Bucket.Name}/{photoKey}";
             
             // Copy object from upload prefix to album prefix.
-            await CopyOriginal(record.S3.Object.Key, photoKey);
+            await CopyOriginal(record.S3.Object.Key, photoKey + "_original");
             
-            // Generate Thumbnails
-            //using var smallThumbnail = await GenerateThumbnailAsync(image, 40);
-            await UploadThumbnailAsync(image, 160, $"{photoKey}_medium");
-            await UploadThumbnailAsync(image, 1536, $"{photoKey}_large");
+            using var context = new ImageProcessorContext(image);
+            // Process the image
+            var processors = imageProcessors.GroupBy(p => p.Priority).OrderByDescending(g => g.Key);
+            foreach (var processor in processors)
+            {
+                await Task.WhenAll(processor.Select(p => p.ProcessImageAsync(context, cancellationToken)).ToArray());
+            }
             
             var photo = new Photo(Guid.Parse(photoId), Guid.Parse(albumId))
             {
                 Url = photoUrl,
-                Metadata = new PhotoMetadata() { Width = image.Width, Height = image.Height }
+                Metadata = context.Metadata
             };
-            //photo.AddThumbnail("small", new ThumbnailData { Data = smallThumbnail.GetBuffer(), Width = 40, Height = 40});
-            photo.AddThumbnail("medium", new ThumbnailReference { Url = $"{photoUrl}_medium", Width = 160, Height = 160});
-            photo.AddThumbnail("large", new ThumbnailReference { Url = $"{photoUrl}_large", Width = 1536, Height = 1536});
-            
-            await photoRepository.InsertAsync(photo, cancellationToken);
+
+            await Task.WhenAll(
+                UploadImageAsync(context.Image, photoKey),
+                photoRepository.InsertAsync(photo, cancellationToken)
+            );
             
             logger.LogInformation("Uploaded {Key}", record.S3.Object.Key);
         }
@@ -66,24 +73,12 @@ public class S3EventMessageHandler(IObjectStore objectStore, IPhotoRepository ph
         return objectStore.CopyObjectAsync(sourceKey, destinationKey);
     }
     
-    private static async Task<MemoryStream> GenerateThumbnailAsync(Image image, int size)
+    private async Task<bool> UploadImageAsync(Image image, string objectKey)
     {
-        var resizeOptions = new ResizeOptions
-        {
-            Size = new Size(size),
-            Mode = ResizeMode.Max
-        };
-        using var thumbnailImage = image.Clone(x => x.Resize(resizeOptions));
-        var memoryStream = new MemoryStream();
-        await thumbnailImage.SaveAsWebpAsync(memoryStream);
-        memoryStream.Position = 0;
-        return memoryStream;
-    }
-    
-    private async Task<bool> UploadThumbnailAsync(Image image, int size, string objectKey)
-    {
-        using var stream = await GenerateThumbnailAsync(image, size);
-        return await objectStore.PutObjectStreamAsync(objectKey, stream, "image/webp");
+        using var stream = new MemoryStream();
+        await image.SaveAsJpegAsync(stream);
+        stream.Position = 0;
+        return await objectStore.PutObjectStreamAsync(objectKey, stream, "image/jpeg");
     }
     
 }

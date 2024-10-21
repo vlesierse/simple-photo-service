@@ -17,9 +17,11 @@
     <PackageVersion Include="Amazon.Lambda.S3Events" Version="3.1.0" />
     <PackageVersion Include="AWS.Messaging" Version="0.9.2" />
     <PackageVersion Include="AWS.Messaging.Telemetry.OpenTelemetry" Version="0.9.1" />
-    <PackageVersion Include="AWSSDK.Core" Version="3.7.400.21" />
+    <PackageVersion Include="AWSSDK.BedrockRuntime" Version="3.7.404.5" />
+    <PackageVersion Include="AWSSDK.Core" Version="3.7.400.33" />
     <PackageVersion Include="AWSSDK.DynamoDBv2" Version="3.7.303.2" />
     <PackageVersion Include="AWSSDK.Extensions.NETCore.Setup" Version="3.7.301" />
+    <PackageVersion Include="AWSSDK.Rekognition" Version="3.7.400.33" />
     <PackageVersion Include="AWSSDK.S3" Version="3.7.402.12" />
     <PackageVersion Include="AWSSDK.SSO" Version="3.7.400.21" />
     <PackageVersion Include="AWSSDK.SSOOIDC" Version="3.7.400.21" />
@@ -29,8 +31,8 @@
     <PackageVersion Include="Aspire.Hosting.AppHost" Version="$(AspireVersion)" />
     <PackageVersion Include="Aspire.Hosting.AWS" Version="$(AspireVersion)" />
     <PackageVersion Include="Aspire.Hosting.NodeJs" Version="$(AspireVersion)" />
-    <PackageVersion Include="Microsoft.Extensions.ServiceDiscovery" Version="$(AspireVersion)" />
-    <PackageVersion Include="Microsoft.Extensions.ServiceDiscovery.Dns" Version="$(AspireVersion)" />
+    <PackageVersion Include="Microsoft.Extensions.ServiceDiscovery" Version="9.0.0-preview.4.24456.4" />
+    <PackageVersion Include="Microsoft.Extensions.ServiceDiscovery.Dns" Version="9.0.0-preview.4.24456.4" />
     <!-- ASP.NET -->
     <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.10" />
     <PackageVersion Include="Microsoft.Extensions.Http.Resilience" Version="8.10.0" />

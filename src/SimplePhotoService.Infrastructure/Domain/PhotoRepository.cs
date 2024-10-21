@@ -14,7 +14,7 @@ public class PhotoRepository(IAmazonDynamoDB _client, IOptions<DynamoDBOptions> 
     {
         var document = base.ToDocument(entity);
         document["PK"] = $"A#{entity.AlbumId}";
-        document["SK"] = $"{document["SK"].AsString()}#{entity.CreatedAt.ToUnixTimeSeconds()}";
+        document["SK"] = $"{document["SK"].AsString()}";
         return document;
     }
 
