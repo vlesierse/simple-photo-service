@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { signIn } from "aws-amplify/auth";
+import { AuthError, signIn } from "aws-amplify/auth";
 import {
   Button,
   Container,
@@ -13,7 +13,6 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 
 import { Input } from "../../../components/forms";
-import { AuthError } from "../core";
 import { useNavigate } from "react-router-dom";
 
 const FormValidation = Yup.object().shape({

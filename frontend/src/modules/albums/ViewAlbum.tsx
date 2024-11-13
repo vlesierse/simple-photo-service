@@ -1,10 +1,11 @@
 import { createRef, useEffect, useRef, useState } from "react";
 import {
+  Badge,
   Button,
   Cards,
   CardsProps,
-  Container,
   Header,
+  SpaceBetween,
 } from "@cloudscape-design/components";
 import { useParams } from "react-router-dom";
 import { get, post } from "aws-amplify/api";
@@ -23,10 +24,20 @@ export const ViewAlbum = () => {
         content: (photo) => (
           <div>
             {photo.url ? (
-              <img
-                style={{ width: "100%", height: "auto" }}
-                src={photo.thumbnails?.medium?.url ?? photo.url}
-              />
+              <SpaceBetween size="xxs">
+                <img
+                  style={{ width: "100%", height: "auto" }}
+                  src={photo.thumbnails?.medium?.url ?? photo.url}
+                />
+                {photo.metadata?.explicitContent && (
+                  <Badge color="red">Explicit</Badge>
+                )}
+                <SpaceBetween direction="horizontal" size="s">
+                  {photo.metadata?.labels.map((label) => (
+                    <Badge>{label.name}</Badge>
+                  ))}
+                </SpaceBetween>
+              </SpaceBetween>
             ) : (
               <>
                 <input

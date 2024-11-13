@@ -45,9 +45,9 @@ export const buildQueryParams = (
           const param = params[key];
           return param instanceof Array
             ? param
-                .map((p) => key + "=" + encodeURIComponent(p ?? "") ?? "")
+                .map((p) => key + "=" + encodeURIComponent(p ?? ""))
                 .join("&")
-            : key + "=" + encodeURIComponent(param ?? "") ?? "";
+            : key + "=" + encodeURIComponent(param ?? "");
         })
         .join("&")}`
     : route;

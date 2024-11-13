@@ -1,5 +1,10 @@
 import { useState } from "react";
-import { resendSignUpCode, confirmSignUp, autoSignIn } from "aws-amplify/auth";
+import {
+  resendSignUpCode,
+  confirmSignUp,
+  autoSignIn,
+  AuthError,
+} from "aws-amplify/auth";
 import {
   Alert,
   Button,
@@ -14,7 +19,7 @@ import { Formik, FormikProps } from "formik";
 import * as Yup from "yup";
 
 import { Input } from "../../../components/forms";
-import { AuthError, useAuth } from "../core";
+import { useAuth } from "../core";
 
 type FormType = {
   email: string;
@@ -61,7 +66,7 @@ export const ConfirmSignUp = () => {
   };
 
   const initialValues: FormType = {
-    email: currentUser?.getUsername() ?? "",
+    email: currentUser?.username ?? "",
     code: "",
   };
 
@@ -97,7 +102,7 @@ export const ConfirmSignUp = () => {
               <FormField label="Code" errorText={formik.errors.code}>
                 <Input name="code" placeholder="Confirmation code" />
               </FormField>
-              {!information ?? (
+              {information && (
                 <Alert type="info" header="Resend">
                   {information}
                 </Alert>

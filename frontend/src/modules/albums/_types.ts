@@ -8,6 +8,19 @@ export type Photo = {
   id: string;
   url?: string;
   thumbnails?: Thumbnails;
+  metadata?: PhotoMetadata;
+};
+
+export type PhotoMetadata = {
+  width: number;
+  height: number;
+  labels: Label[];
+  explicitContent: boolean;
+};
+
+export type Label = {
+  name: string;
+  confidence: number;
 };
 
 export type Thumbnails = {

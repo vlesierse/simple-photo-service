@@ -1,5 +1,8 @@
 import React from "react";
-import { Input as CSInput, InputProps as CSInputProps } from "@cloudscape-design/components";
+import {
+  Input as CSInput,
+  InputProps as CSInputProps,
+} from "@cloudscape-design/components";
 import { FormikFieldProps } from "./FormikFieldProps";
 import { Field, FieldProps } from "formik";
 import { Optional } from "../types";
@@ -7,16 +10,29 @@ import { Optional } from "../types";
 export type InputProps = FormikFieldProps & CSInputProps;
 
 interface InputType
-  extends React.ForwardRefExoticComponent<FormikFieldProps & Optional<CSInputProps, "value"> & React.RefAttributes<CSInputProps.Ref>> {}
+  extends React.ForwardRefExoticComponent<
+    FormikFieldProps &
+      Optional<CSInputProps, "value"> &
+      React.RefAttributes<CSInputProps.Ref>
+  > {}
 
 const Input = React.forwardRef(
-  ({ name, validate, fast, onChange: $onChange, onBlur: $onBlur, ...restProps }: InputProps, ref: React.Ref<CSInputProps.Ref>) => (
+  (
+    {
+      name,
+      validate,
+      fast,
+      onChange: $onChange,
+      onBlur: $onBlur,
+      ...restProps
+    }: InputProps,
+    ref: React.Ref<CSInputProps.Ref>
+  ) => (
     <Field name={name} validate={validate} fast={fast}>
-      {({ field: { value }, form }: FieldProps) => (
+      {({ field, form }: FieldProps) => (
         <CSInput
           ref={ref}
           name={name}
-          value={value}
           onChange={(event) => {
             form.setFieldValue(name, event.detail.value);
             $onChange && $onChange(event);
@@ -26,6 +42,7 @@ const Input = React.forwardRef(
             $onBlur && $onBlur(event);
           }}
           {...restProps}
+          value={field.value}
         />
       )}
     </Field>

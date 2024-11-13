@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { signUp } from "aws-amplify/auth";
+import { AuthError, signUp } from "aws-amplify/auth";
 import {
   Button,
   Container,
@@ -13,7 +13,6 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 
 import { Input } from "../../../components/forms";
-import { AuthError } from "../core";
 import { useNavigate } from "react-router-dom";
 
 type FormType = {
